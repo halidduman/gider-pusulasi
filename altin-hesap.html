@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Altın Fatura Hesaplayıcı</title>
+
+    <!-- Google Fonts: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind Config for Custom Colors and Fonts -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        gold: {
+                            400: '#FBBF24',
+                            500: '#F59E0B',
+                            600: '#D97706',
+                        },
+                        dark: {
+                            800: '#1E293B',
+                            900: '#0F172A',
+                            950: '#0B0F19',
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0B0F19;
+            background-image:
+                radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%),
+                radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 0.2) 0, transparent 50%),
+                radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 0.1) 0, transparent 50%);
+            background-attachment: fixed;
+            color: #F8FAFC;
+        }
+
+        /* Glassmorphism Classes */
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .glass-input {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .glass-input:focus {
+            background: rgba(15, 23, 42, 0.8);
+            border-color: #F59E0B;
+            box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+            outline: none;
+        }
+
+        /* Hide Number Input Arrows */
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col items-center justify-center p-4 antialiased">
+
+    <div class="w-full max-w-md w-full relative z-10">
+        <!-- Floating decorative blobs -->
+        <div
+            class="absolute -top-10 -left-10 w-32 h-32 bg-gold-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse-slow">
+        </div>
+        <div
+            class="absolute -bottom-10 -right-10 w-32 h-32 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse-slow font-delay-2000">
+        </div>
+
+        <!-- Main Card -->
+        <div class="glass-panel rounded-3xl p-6 sm:p-8 relative overflow-hidden">
+
+            <!-- Header -->
+            <div class="flex items-center space-x-3 mb-8">
+                <div class="bg-gradient-to-br from-gold-400 to-gold-600 p-2.5 rounded-xl shadow-lg shadow-gold-500/30">
+                    <i data-lucide="calculator" class="w-6 h-6 text-dark-900"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold tracking-tight text-white">Fatura Hesaplayıcı</h1>
+                    <p class="text-sm text-slate-400 font-medium mt-0.5">Hızlı ve modern 22 ayar altın hesabı</p>
+                </div>
+            </div>
+
+            <!-- Inputs Area -->
+            <div class="space-y-5 mb-8">
+                <!-- Has Input -->
+                <div>
+                    <label for="hasAltin" class="block text-sm font-semibold text-slate-300 mb-2 ml-1">Günlük Has
+                        Değeri</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <i data-lucide="trending-up" class="w-5 h-5 text-slate-400"></i>
+                        </div>
+                        <input type="number" id="hasAltin" placeholder="Örn: 7100"
+                            class="glass-input block w-full pl-11 pr-4 py-3.5 rounded-2xl text-lg font-medium text-white placeholder-slate-500 transition-all">
+                    </div>
+                </div>
+
+                <!-- Nakit Input -->
+                <div>
+                    <label for="nakitTutar" class="block text-sm font-semibold text-slate-300 mb-2 ml-1">Nakit Tutarı
+                        (TL)</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <i data-lucide="banknote" class="w-5 h-5 text-slate-400"></i>
+                        </div>
+                        <input type="number" id="nakitTutar" placeholder="Örn: 15000"
+                            class="glass-input block w-full pl-11 pr-4 py-3.5 rounded-2xl text-lg font-medium text-white placeholder-slate-500 transition-all">
+                    </div>
+                </div>
+            </div>
+
+            <hr class="border-slate-700/50 mb-6">
+
+            <!-- Results Area -->
+            <div class="space-y-4">
+
+                <!-- Has Sonucu -->
+                <div
+                    class="bg-dark-900/50 rounded-2xl p-4 border border-slate-700/30 flex justify-between items-center group hover:bg-dark-900/80 transition-colors">
+                    <div class="flex items-center space-x-3">
+                        <div
+                            class="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
+                            <i data-lucide="coins" class="w-5 h-5 text-blue-400"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Has Sonucu</p>
+                            <p class="text-xs text-slate-500">(916 ile çarpıp -20)</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <span id="sonucHas" class="text-xl font-bold text-white tracking-tight">0</span>
+                    </div>
+                </div>
+
+                <!-- Miktar -->
+                <div
+                    class="bg-dark-900/50 rounded-2xl p-4 border border-slate-700/30 flex justify-between items-center group hover:bg-dark-900/80 transition-colors">
+                    <div class="flex items-center space-x-3">
+                        <div
+                            class="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
+                            <i data-lucide="weight" class="w-5 h-5 text-emerald-400"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Miktar</p>
+                            <p class="text-xs text-slate-500">(Gramaj)</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <span id="sonucMiktar" class="text-xl font-bold text-white tracking-tight">0.000</span>
+                    </div>
+                </div>
+
+                <!-- Son Tutar (Miktar * Has Sonucu) -->
+                <div
+                    class="bg-gradient-to-br from-gold-500/10 to-gold-700/10 rounded-2xl p-5 border border-gold-500/20 flex justify-between items-center relative overflow-hidden">
+                    <div class="absolute right-0 top-0 w-32 h-32 bg-gold-500/10 blur-2xl rounded-full"></div>
+                    <div class="flex items-center space-x-3 relative z-10">
+                        <div
+                            class="w-12 h-12 rounded-full bg-gold-500/20 flex items-center justify-center border border-gold-400/30 shadow-inner">
+                            <i data-lucide="receipt" class="w-6 h-6 text-gold-400"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-gold-400/80 uppercase tracking-wider mb-0.5">Fatura Tutarı
+                            </p>
+                            <p class="text-xs text-slate-400">(Miktar × Has Sonucu)</p>
+                        </div>
+                    </div>
+                    <div class="text-right relative z-10">
+                        <span class="text-sm font-semibold text-gold-500 mr-1">₺</span>
+                        <span id="sonucTutar" class="text-3xl font-black text-white tracking-tight">0.00</span>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Footer Note -->
+        <p class="text-center text-slate-500 text-xs mt-6 font-medium">
+            Otomatik olarak anında hesaplanır
+        </p>
+
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Elements
+        const hasInput = document.getElementById('hasAltin');
+        const nakitInput = document.getElementById('nakitTutar');
+
+        const sonucHasEl = document.getElementById('sonucHas');
+        const sonucMiktarEl = document.getElementById('sonucMiktar');
+        const sonucTutarEl = document.getElementById('sonucTutar');
+
+        // Formatter for Currency
+        const formatter = new Intl.NumberFormat('tr-TR', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+
+        // Formatter for Miktar (3 decimals usually)
+        const miktarFormatter = new Intl.NumberFormat('tr-TR', {
+            minimumFractionDigits: 3,
+            maximumFractionDigits: 3
+        });
+
+        function hesapla() {
+            const has = parseFloat(hasInput.value) || 0;
+            const nakit = parseFloat(nakitInput.value) || 0;
+
+            if (has === 0 || nakit === 0) {
+                sonucHasEl.textContent = '0';
+                sonucMiktarEl.textContent = '0.000';
+                sonucTutarEl.textContent = '0.00';
+                return;
+            }
+
+            // Calculation Logic based on user request:
+            // "916*has çıkan değerin -20 yapıyoruz" -> Has Sonucu
+            const baseValue = Math.floor(has * 0.916);
+            const hasSonucu = baseValue - 20;
+
+            const ekrandaHasSonucu = hasSonucu;
+
+            // Kullanıcının belirttiği 53.475 ve 53.319 farkından anlaşılan o ki,
+            // Miktar hesaplanırken "Nakit / (Has Sonuç - 20)" işlemi yapılıyor.
+            // Önceki kodda (Nakit / Ham Has Sonuç) yapılıyordu ve 53.319 çıkıyordu.
+            // Şimdi ise (Nakit / Ekrandaki Has Sonucu) yapıldığında 53.475 çıkıyor.
+            const islemFiyati = hasSonucu;
+
+            // Miktar (3 decimals precision) - Yukarı veya aşağı yuvarlama mevzusu için standart Number.toFixed(3) yeterli.
+            // Eğer daha hassas bir bindelik zemin lazımsa Math.floor veya Math.round deneyebiliriz.
+            // Ancak bankacılık/kuyumculukta genelde tam yuvarlama veya sadece 3 hane gösterim yapılır.
+            let rawMiktar = nakit / islemFiyati;
+            let miktar = Math.round(rawMiktar * 1000) / 1000;
+
+            // Tutar = miktar * islemFiyati
+            let tutar = miktar * islemFiyati;
+
+            // Update DOM
+            sonucHasEl.textContent = new Intl.NumberFormat('tr-TR').format(ekrandaHasSonucu);
+            sonucMiktarEl.textContent = miktar.toFixed(3).replace('.', ',');
+            sonucTutarEl.textContent = formatter.format(tutar);
+        }
+
+        // Add event listeners
+        hasInput.addEventListener('input', hesapla);
+        nakitInput.addEventListener('input', hesapla);
+    </script>
+</body>
+
+</html>
+```
